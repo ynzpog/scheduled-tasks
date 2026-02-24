@@ -4,11 +4,11 @@ from twilio.rest import Client
 
 
 OWM_Endpoint = "https://api.openweathermap.org/data/2.5/forecast"
-api_key = os.environ.get("a3df354b953bb334ac2c05d15a62f6ba")
+api_key = os.environ.get("OWM_API_KEY")
 LAT = 14.848560
 LONG = 120.982040
-account_sid = os.environ.get("AC1e0cdc4e0e6725d66e2fbd2ab552b5fc")
-auth_token = os.environ.get("cb1bb7cb5e50b1397d6555e78be865f5")
+account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 
 weather_params = {
     "lat": LAT,
@@ -27,6 +27,7 @@ for hour_data in weather_data["list"]:
     condition_code = hour_data["weather"][0]["id"]
     if int(condition_code) < 700:
         will_rain = True
+client = Client(account_sid, auth_token)
 if will_rain:
     client = Client(account_sid, auth_token)
     message = client.messages.create(
@@ -35,8 +36,7 @@ if will_rain:
         to="whatsapp:+639399101416",
     )
     print(message.status)
-else:
-    client = Client(account_sid, auth_token)
+else:    
     message = client.messages.create(
         body="No rain🌞🌞",
         from_="whatsapp:+14155238886",
